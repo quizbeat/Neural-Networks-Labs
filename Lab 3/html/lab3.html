@@ -1,0 +1,413 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>lab3</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-12-23"><meta name="DC.source" content="lab3.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">PART 1</a></li><li><a href="#5">PART 2</a></li></ul></div><h2>PART 1<a name="1"></a></h2><pre class="codeinput">clear;
+clc;
+
+t_range = 0 : 0.025 : 2 * pi;
+
+<span class="comment">% ellipse signature: ellipsee(t,a,b,x0,y0,alpha)</span>
+
+X1 = ellipse(t_range, 0.4, 0.15, -0.2, -0.18, pi / 3);
+P1 = X1(:, randperm(numel(t_range), 60));
+T1 = [ones(1, 60); zeros(1, 60); zeros(1, 60)];
+
+X2 = ellipse(t_range, 0.7, 0.5, -0.2, -0.18, pi / 3);
+P2 = X2(:, randperm(numel(t_range), 100));
+T2 = [zeros(1, 100); ones(1, 100); zeros(1, 100)];
+
+X3 = ellipse(t_range, 1, 1, 0, 0, 0);
+P3 = X3(:, randperm(numel(t_range), 120));
+T3 = [zeros(1, 120); zeros(1, 120); ones(1, 120)];
+
+[trainInd1,valInd1,testInd1] = dividerand(60, .7, .2, .1);
+[trainInd2,valInd2,testInd2] = dividerand(100, .7, .2, .1);
+[trainInd3,valInd3,testInd3] = dividerand(120, .7, .2, .1);
+</pre><pre class="codeinput">figure;
+hold <span class="string">on</span>;
+plot(X1(1, :), X1(2, :), <span class="string">'-r'</span>, <span class="string">'LineWidth'</span>, 2);
+plot(P1(1, trainInd1), P1(2, trainInd1), <span class="string">'or'</span>, <span class="string">'MarkerEdgeColor'</span>, <span class="string">'k'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'r'</span>, <span class="string">'MarkerSize'</span>, 7);
+plot(P1(1, valInd1), P1(2, valInd1), <span class="string">'rV'</span>, <span class="string">'MarkerEdgeColor'</span>, <span class="string">'k'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'c'</span>, <span class="string">'MarkerSize'</span>, 7);
+plot(P1(1, testInd1), P1(2, testInd1), <span class="string">'rs'</span>, <span class="string">'MarkerEdgeColor'</span>, <span class="string">'k'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'c'</span>, <span class="string">'MarkerSize'</span>, 7);
+
+plot(X2(1, :), X2(2, :), <span class="string">'-g'</span>, <span class="string">'LineWidth'</span>, 2);
+plot(P2(1, trainInd2), P2(2, trainInd2), <span class="string">'og'</span>, <span class="string">'MarkerEdgeColor'</span>, <span class="string">'k'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'g'</span>, <span class="string">'MarkerSize'</span>, 7);
+plot(P2(1, valInd2), P2(2, valInd2), <span class="string">'gV'</span>, <span class="string">'MarkerEdgeColor'</span>, <span class="string">'k'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'c'</span>, <span class="string">'MarkerSize'</span>, 7);
+plot(P2(1, testInd2), P2(2, testInd2), <span class="string">'gs'</span>, <span class="string">'MarkerEdgeColor'</span>, <span class="string">'k'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'c'</span>, <span class="string">'MarkerSize'</span>, 7);
+
+plot(X3(1, :), X3(2, :), <span class="string">'-b'</span>, <span class="string">'LineWidth'</span>, 2);
+plot(P3(1, trainInd3), P3(2, trainInd3), <span class="string">'ob'</span>, <span class="string">'MarkerEdgeColor'</span>, <span class="string">'k'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'b'</span>, <span class="string">'MarkerSize'</span>, 7);
+plot(P3(1, valInd3), P3(2, valInd3), <span class="string">'bV'</span>, <span class="string">'MarkerEdgeColor'</span>, <span class="string">'k'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'c'</span>, <span class="string">'MarkerSize'</span>, 7);
+plot(P3(1, testInd3), P3(2, testInd3), <span class="string">'bs'</span>, <span class="string">'MarkerEdgeColor'</span>, <span class="string">'k'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'c'</span>, <span class="string">'MarkerSize'</span>, 7);
+
+legend(<span class="string">'initial set 1'</span>, <span class="string">'train subset 1'</span>, <span class="string">'control subset 1'</span>, <span class="string">'test subset 1'</span>,<span class="keyword">...</span>
+       <span class="string">'initial set 2'</span>, <span class="string">'train subset 2'</span>, <span class="string">'control subset 2'</span>, <span class="string">'test subset 2'</span>,<span class="keyword">...</span>
+       <span class="string">'initial set 3'</span>, <span class="string">'train subset 3'</span>, <span class="string">'control subset 3'</span>, <span class="string">'test subset 3'</span>);
+axis([-1.2 1.2 -1.2 1.2]);
+grid <span class="string">on</span>;
+</pre><img vspace="5" hspace="5" src="lab3_01.png" alt=""> <pre class="codeinput">Ptrain = [P1(:, trainInd1) P2(:, trainInd2) P3(:, trainInd3)];
+Ttrain = [T1(:, trainInd1) T2(:, trainInd2) T3(:, trainInd3)];
+ntrain = size(Ptrain, 2);
+
+Pval = [P1(:, valInd1) P2(:, valInd2) P3(:, valInd3)];
+Tval = [T1(:, valInd1) T2(:, valInd2) T3(:, valInd3)];
+nval = size(Pval, 2);
+
+Ptest = [P1(:, testInd1) P2(:, testInd2) P3(:, testInd3)];
+Ttest = [T1(:, testInd1) T2(:, testInd2) T3(:, testInd3)];
+ntest = size(Ptest, 2);
+
+P = [Ptrain Pval Ptest];
+T = [Ttrain Tval Ttest];
+</pre><pre class="codeinput">net = feedforwardnet(20, <span class="string">'trainrp'</span>);
+net = configure(net, [-1.2 1.2; -1.2 1.2], [0 1; 0 1; 0 1]);
+
+net.layers{2}.transferFcn = <span class="string">'tansig'</span>;
+
+view(net);
+
+<span class="comment">%net.divideFcn = '';</span>
+net.divideFcn = <span class="string">'divideind'</span>;
+net.divideParam.trainInd = 1 : ntrain;
+net.divideParam.valInd = ntrain + 1 : ntrain + nval;
+net.divideParam.testInd = ntrain + nval + 1 : ntrain + nval + ntest;
+
+net = init(net);
+
+net.trainParam.epochs = 1500;
+net.trainParam.max_fail = 1500;
+net.trainParam.goal = 10e-5;
+
+disp(net.trainParam.goal);
+
+net = train(net, P, T);
+
+[X, Y] = meshgrid(-1.2 : 0.025 : 1.2, 1.2 : -0.025 : -1.2);
+n = length(X);
+
+out = sim(net, [X(:)'; Y(:)']);
+out = max(0, min(1, out));
+out = round(out * 10) * 0.1;
+
+ctable = unique(out', <span class="string">'rows'</span>);
+cmap = zeros(n, n);
+
+<span class="keyword">for</span> i = 1 : size(ctable, 1)
+    cmap(ismember(out', ctable(i, :), <span class="string">'rows'</span>)) = i;
+<span class="keyword">end</span>
+
+image([-1.2, 1.2], [-1.2, 1.2], cmap);
+colormap(ctable);
+</pre><pre class="codeoutput">   1.0000e-04
+
+</pre><img vspace="5" hspace="5" src="lab3_02.png" alt=""> <img vspace="5" hspace="5" src="lab3_03.png" alt=""> <h2>PART 2<a name="5"></a></h2><pre class="codeinput">t0 = 0;
+tn = 4;
+dt = 0.02;
+
+n = (tn - t0) / dt + 1;
+
+func = @(t) cos(t .^ 2);
+
+x = func(t0 : dt : tn);
+
+plot(t0:dt:tn, x), grid;
+</pre><img vspace="5" hspace="5" src="lab3_04.png" alt=""> <pre class="codeinput"><span class="comment">%{
+</span><span class="comment">% gradientn spusk s adaptivnym shagom
+</span><span class="comment">net = feedforwardnet(20, 'traingda');
+</span><span class="comment">% train speed
+</span><span class="comment">net.trainParam.lr = 0.05;
+</span><span class="comment">% koef uvelicheniya skorosti i nastroiki
+</span><span class="comment">net.trainParam.lr_inc = 1.05;
+</span><span class="comment">%}
+</span>
+
+<span class="comment">% KvaziNewton metod (Broiden, Fletcher, Goldfarb, Shanno)</span>
+net = feedforwardnet(5, <span class="string">'trainbfg'</span>);
+
+
+net = configure(net, t0 : dt : tn, x);
+
+trainInd = 1 : floor(n * 0.9);
+valInd = floor(n * 0.9) + 1 : n;
+testInd = [];
+
+net.divideFcn = <span class="string">'divideind'</span>;
+net.divideParam.trainInd = trainInd;
+net.divideParam.valInd = valInd;
+net.divideParam.testInd = testInd;
+
+net = init(net);
+
+net.trainParam.epochs = 600;
+net.trainParam.max_fail = 600;
+net.trainParam.goal = 10e-8;
+
+net = train(net, t0 : dt : tn, x);
+y = sim(net, t0 : dt : tn);
+
+sqrt(mse(x(trainInd) - y(trainInd)))
+
+sqrt(mse(x(valInd) - y(valInd)))
+
+figure;
+hold <span class="string">on</span>;
+plot(t0 : dt : tn, x, <span class="string">'-b'</span>);
+plot(t0 : dt : tn, y, <span class="string">'-r'</span>);
+grid <span class="string">on</span>;
+
+figure;
+plot(t0 : dt : tn, x - y);
+grid <span class="string">on</span>;
+</pre><pre class="codeoutput">
+ans =
+
+    0.5072
+
+
+ans =
+
+    0.4623
+
+</pre><img vspace="5" hspace="5" src="lab3_05.png" alt=""> <img vspace="5" hspace="5" src="lab3_06.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% PART 1
+
+clear;
+clc;
+
+t_range = 0 : 0.025 : 2 * pi;
+
+% ellipse signature: ellipsee(t,a,b,x0,y0,alpha)
+
+X1 = ellipse(t_range, 0.4, 0.15, -0.2, -0.18, pi / 3);
+P1 = X1(:, randperm(numel(t_range), 60));
+T1 = [ones(1, 60); zeros(1, 60); zeros(1, 60)];
+
+X2 = ellipse(t_range, 0.7, 0.5, -0.2, -0.18, pi / 3);
+P2 = X2(:, randperm(numel(t_range), 100));
+T2 = [zeros(1, 100); ones(1, 100); zeros(1, 100)];
+
+X3 = ellipse(t_range, 1, 1, 0, 0, 0);
+P3 = X3(:, randperm(numel(t_range), 120));
+T3 = [zeros(1, 120); zeros(1, 120); ones(1, 120)];
+
+[trainInd1,valInd1,testInd1] = dividerand(60, .7, .2, .1);
+[trainInd2,valInd2,testInd2] = dividerand(100, .7, .2, .1);
+[trainInd3,valInd3,testInd3] = dividerand(120, .7, .2, .1);
+
+%%
+
+figure;
+hold on;
+plot(X1(1, :), X1(2, :), '-r', 'LineWidth', 2);
+plot(P1(1, trainInd1), P1(2, trainInd1), 'or', 'MarkerEdgeColor', 'k', 'MarkerFaceColor', 'r', 'MarkerSize', 7);
+plot(P1(1, valInd1), P1(2, valInd1), 'rV', 'MarkerEdgeColor', 'k', 'MarkerFaceColor', 'c', 'MarkerSize', 7);
+plot(P1(1, testInd1), P1(2, testInd1), 'rs', 'MarkerEdgeColor', 'k', 'MarkerFaceColor', 'c', 'MarkerSize', 7);
+
+plot(X2(1, :), X2(2, :), '-g', 'LineWidth', 2);
+plot(P2(1, trainInd2), P2(2, trainInd2), 'og', 'MarkerEdgeColor', 'k', 'MarkerFaceColor', 'g', 'MarkerSize', 7);
+plot(P2(1, valInd2), P2(2, valInd2), 'gV', 'MarkerEdgeColor', 'k', 'MarkerFaceColor', 'c', 'MarkerSize', 7);
+plot(P2(1, testInd2), P2(2, testInd2), 'gs', 'MarkerEdgeColor', 'k', 'MarkerFaceColor', 'c', 'MarkerSize', 7);
+
+plot(X3(1, :), X3(2, :), '-b', 'LineWidth', 2);
+plot(P3(1, trainInd3), P3(2, trainInd3), 'ob', 'MarkerEdgeColor', 'k', 'MarkerFaceColor', 'b', 'MarkerSize', 7);
+plot(P3(1, valInd3), P3(2, valInd3), 'bV', 'MarkerEdgeColor', 'k', 'MarkerFaceColor', 'c', 'MarkerSize', 7);
+plot(P3(1, testInd3), P3(2, testInd3), 'bs', 'MarkerEdgeColor', 'k', 'MarkerFaceColor', 'c', 'MarkerSize', 7);
+
+legend('initial set 1', 'train subset 1', 'control subset 1', 'test subset 1',...
+       'initial set 2', 'train subset 2', 'control subset 2', 'test subset 2',...
+       'initial set 3', 'train subset 3', 'control subset 3', 'test subset 3');
+axis([-1.2 1.2 -1.2 1.2]);
+grid on;
+
+%%
+
+Ptrain = [P1(:, trainInd1) P2(:, trainInd2) P3(:, trainInd3)];
+Ttrain = [T1(:, trainInd1) T2(:, trainInd2) T3(:, trainInd3)];
+ntrain = size(Ptrain, 2);
+
+Pval = [P1(:, valInd1) P2(:, valInd2) P3(:, valInd3)];
+Tval = [T1(:, valInd1) T2(:, valInd2) T3(:, valInd3)];
+nval = size(Pval, 2);
+
+Ptest = [P1(:, testInd1) P2(:, testInd2) P3(:, testInd3)];
+Ttest = [T1(:, testInd1) T2(:, testInd2) T3(:, testInd3)];
+ntest = size(Ptest, 2);
+
+P = [Ptrain Pval Ptest];
+T = [Ttrain Tval Ttest];
+
+%%
+
+net = feedforwardnet(20, 'trainrp');
+net = configure(net, [-1.2 1.2; -1.2 1.2], [0 1; 0 1; 0 1]);
+
+net.layers{2}.transferFcn = 'tansig';
+
+view(net);
+
+%net.divideFcn = '';
+net.divideFcn = 'divideind';
+net.divideParam.trainInd = 1 : ntrain;
+net.divideParam.valInd = ntrain + 1 : ntrain + nval;
+net.divideParam.testInd = ntrain + nval + 1 : ntrain + nval + ntest;
+
+net = init(net);
+
+net.trainParam.epochs = 1500;
+net.trainParam.max_fail = 1500;
+net.trainParam.goal = 10e-5;
+
+disp(net.trainParam.goal);
+
+net = train(net, P, T);
+
+[X, Y] = meshgrid(-1.2 : 0.025 : 1.2, 1.2 : -0.025 : -1.2);
+n = length(X);
+
+out = sim(net, [X(:)'; Y(:)']);
+out = max(0, min(1, out));
+out = round(out * 10) * 0.1;
+
+ctable = unique(out', 'rows');
+cmap = zeros(n, n);
+
+for i = 1 : size(ctable, 1)
+    cmap(ismember(out', ctable(i, :), 'rows')) = i; 
+end
+
+image([-1.2, 1.2], [-1.2, 1.2], cmap); 
+colormap(ctable);
+
+
+
+%% PART 2
+
+t0 = 0;
+tn = 4;
+dt = 0.02;
+
+n = (tn - t0) / dt + 1;
+
+func = @(t) cos(t .^ 2);
+
+x = func(t0 : dt : tn);
+
+plot(t0:dt:tn, x), grid;
+
+%%
+
+%{
+% gradientn spusk s adaptivnym shagom
+net = feedforwardnet(20, 'traingda');
+% train speed
+net.trainParam.lr = 0.05;
+% koef uvelicheniya skorosti i nastroiki
+net.trainParam.lr_inc = 1.05;
+%}
+
+
+% KvaziNewton metod (Broiden, Fletcher, Goldfarb, Shanno)
+net = feedforwardnet(5, 'trainbfg');
+
+
+net = configure(net, t0 : dt : tn, x);
+
+trainInd = 1 : floor(n * 0.9);
+valInd = floor(n * 0.9) + 1 : n;
+testInd = [];
+
+net.divideFcn = 'divideind';
+net.divideParam.trainInd = trainInd;
+net.divideParam.valInd = valInd;
+net.divideParam.testInd = testInd;
+
+net = init(net);
+
+net.trainParam.epochs = 600;
+net.trainParam.max_fail = 600;
+net.trainParam.goal = 10e-8;
+
+net = train(net, t0 : dt : tn, x);
+y = sim(net, t0 : dt : tn);
+
+sqrt(mse(x(trainInd) - y(trainInd)))
+
+sqrt(mse(x(valInd) - y(valInd)))
+
+figure;
+hold on;
+plot(t0 : dt : tn, x, '-b');
+plot(t0 : dt : tn, y, '-r');
+grid on;
+
+figure;
+plot(t0 : dt : tn, x - y);
+grid on;
+##### SOURCE END #####
+--></body></html>

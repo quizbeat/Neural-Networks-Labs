@@ -1,0 +1,387 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Lab8</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-01-10"><meta name="DC.source" content="Lab8.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">PART 1</a></li><li><a href="#2">PART 2</a></li></ul></div><h2>PART 1<a name="1"></a></h2><pre class="codeinput">clear;
+clc;
+
+data = load(<span class="string">'data.txt'</span>);
+x = data(:, 4);
+
+<span class="comment">%x = cell2mat(x);</span>
+x = smooth(x, 12);
+D = 10;
+
+ntrain = 500;
+nval = 100;
+ntest = 50;
+
+trainInd = 1 : ntrain;
+valInd = ntrain + 1 : ntrain + nval;
+testInd = ntrain + nval + 1 : ntrain + nval + ntest;
+
+net = timedelaynet(1:D,8,<span class="string">'trainlm'</span>);
+
+net.divideFcn = <span class="string">'divideind'</span>;
+net.divideParam.trainInd = trainInd;
+net.divideParam.valInd = valInd;
+net.divideParam.testInd = testInd;
+
+x = con2seq(x(1:ntrain+nval+ntest)');
+
+net = configure(net, x, x);
+net = init(net);
+
+net.trainParam.epochs = 600;
+net.trainParam.max_fail = 2000;
+net.trainParam.goal = 10e-5;
+view(net);
+
+[Xs, Xi, Ai, Ts] = preparets(net, x, x);
+net = train(net, Xs, Ts, Xi, Ai);
+Y = sim(net, Xs, Xi);
+
+figure;
+hold <span class="string">on</span>;
+grid <span class="string">on</span>;
+plot(cell2mat(x), <span class="string">'-b'</span>);
+plot([cell2mat(Xi) cell2mat(Y)], <span class="string">'-r'</span>);
+
+xm = cell2mat(x);
+ym = cell2mat(Y);
+
+figure;
+hold <span class="string">on</span>;
+grid <span class="string">on</span>;
+plot(xm(ntrain + nval + 1 : ntrain + nval + ntest), <span class="string">'-b'</span>);
+plot(ym(ntrain + nval - 9 : ntrain + nval + ntest - 10), <span class="string">'-r'</span>);
+</pre><img vspace="5" hspace="5" src="Lab8_01.png" alt=""> <img vspace="5" hspace="5" src="Lab8_02.png" alt=""> <img vspace="5" hspace="5" src="Lab8_03.png" alt=""> <img vspace="5" hspace="5" src="Lab8_04.png" alt=""> <h2>PART 2<a name="2"></a></h2><pre class="codeinput">k1 = 0 : 0.025 : 1;
+p1 = sin(4 * pi * k1);
+t1 = -ones(size(p1));
+
+k2 = 2.9 : 0.025 : 4.55;
+g = @(k) cos(-cos(k) .* k .^ 2 + k);
+p2 = g(k2);
+t2 = ones(size(p2));
+
+R = {6; 7; 1};
+P = [repmat(p1, 1, R{1}), p2, repmat(p1, 1, R{2}), p2, repmat(p1, 1, R{3}), p2];
+T = [repmat(t1, 1, R{1}), t2, repmat(t1, 1, R{2}), t2, repmat(t1, 1, R{3}), t2];
+
+Pseq = con2seq(P);
+Tseq = con2seq(T);
+
+net = distdelaynet({0 : 4, 0 : 4}, 8, <span class="string">'trainoss'</span>);
+net.layers{2}.transferFcn = <span class="string">'tansig'</span>;
+net.divideFcn = <span class="string">''</span>;
+net = configure(net, Pseq, Tseq);
+view(net);
+
+net.trainParam.epochs = 100;
+<span class="comment">%net.trainParam.max_fail = 2000;</span>
+net.trainParam.goal = 10e-5;
+
+[Xs, Xi, Ai, Ts] = preparets(net, Pseq, Tseq);
+net = train(net, Xs, Ts, Xi, Ai);
+Y = sim(net, Xs, Xi);
+
+figure;
+hold <span class="string">on</span>;
+grid <span class="string">on</span>;
+plot(cell2mat(Tseq), <span class="string">'-b'</span>);
+plot([cell2mat(Xi) cell2mat(Y)], <span class="string">'-r'</span>);
+</pre><img vspace="5" hspace="5" src="Lab8_05.png" alt=""> <img vspace="5" hspace="5" src="Lab8_06.png" alt=""> <img vspace="5" hspace="5" src="Lab8_07.png" alt=""> <pre class="codeinput">t0 = 0;
+tn = 10;
+dt = 0.01;
+n = (tn - t0) / dt + 1;
+
+fun = @(k) cos(k .^ 2);
+fun2 = @(y, u) y ./ (1 + y.^2) + u.^3;
+
+u = zeros(1, n);
+u(1) = fun(0);
+
+x = zeros(1, n);
+
+<span class="keyword">for</span> i = 2 : n
+    t = t0 + (i - 1) * dt;
+    x(i) = fun2(x(i - 1), u(i - 1));
+    u(i) = fun(t);
+<span class="keyword">end</span>
+
+figure
+subplot(2,1,1)
+plot(t0:dt:tn, u, <span class="string">'-b'</span>),grid
+ylabel(<span class="string">'control'</span>)
+subplot(2,1,2)
+plot(t0:dt:tn, x, <span class="string">'-r'</span>), grid
+ylabel(<span class="string">'state'</span>)
+xlabel(<span class="string">'t'</span>)
+
+D = 3;
+ntrain = 700;
+nval = 200;
+ntest = 97;
+
+trainInd = 1 : ntrain;
+valInd = ntrain + 1 : ntrain + nval;
+testInd = ntrain + nval + 1 : ntrain + nval + ntest;
+
+net = narxnet(1 : 3, 1, 10);
+net.trainFcn = <span class="string">'trainlm'</span>;
+
+net.divideFcn = <span class="string">'divideind'</span>;
+net.divideParam.trainInd = trainInd;
+net.divideParam.valInd = valInd;
+net.divideParam.testInd = testInd;
+
+net.trainParam.epochs = 600;
+net.trainParam.max_fail = 600;
+net.trainParam.goal = 10e-8;
+view(net);
+
+[Xs, Xi, Ai, Ts] = preparets(net, con2seq(u), {}, con2seq(x));
+net = train(net, Xs, Ts, Xi, Ai);
+Y = sim(net, Xs, Xi);
+
+figure
+subplot(3,1,1)
+plot(t0:dt:tn, u, <span class="string">'-b'</span>),grid
+ylabel(<span class="string">'control'</span>)
+subplot(3,1,2)
+plot(t0:dt:tn, x, <span class="string">'-b'</span>, t0:dt:tn, [x(1:D) cell2mat(Y)], <span class="string">'-r'</span>), grid
+ylabel(<span class="string">'state'</span>)
+subplot(3,1,3)
+plot(t0+D*dt:dt:tn, x(D+1:end) - cell2mat(Y)), grid
+ylabel(<span class="string">'error'</span>)
+xlabel(<span class="string">'t'</span>)
+</pre><img vspace="5" hspace="5" src="Lab8_08.png" alt=""> <img vspace="5" hspace="5" src="Lab8_09.png" alt=""> <img vspace="5" hspace="5" src="Lab8_10.png" alt=""> <img vspace="5" hspace="5" src="Lab8_11.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% PART 1
+clear;
+clc;
+
+data = load('data.txt'); 
+x = data(:, 4);
+
+%x = cell2mat(x);
+x = smooth(x, 12);
+D = 10;
+
+ntrain = 500;
+nval = 100;
+ntest = 50;
+
+trainInd = 1 : ntrain;
+valInd = ntrain + 1 : ntrain + nval;
+testInd = ntrain + nval + 1 : ntrain + nval + ntest;
+
+net = timedelaynet(1:D,8,'trainlm');
+
+net.divideFcn = 'divideind';
+net.divideParam.trainInd = trainInd;
+net.divideParam.valInd = valInd;
+net.divideParam.testInd = testInd;
+
+x = con2seq(x(1:ntrain+nval+ntest)');
+
+net = configure(net, x, x);
+net = init(net);
+
+net.trainParam.epochs = 600;
+net.trainParam.max_fail = 2000;
+net.trainParam.goal = 10e-5;
+view(net);
+
+[Xs, Xi, Ai, Ts] = preparets(net, x, x); 
+net = train(net, Xs, Ts, Xi, Ai);
+Y = sim(net, Xs, Xi);
+
+figure;
+hold on;
+grid on;
+plot(cell2mat(x), '-b');
+plot([cell2mat(Xi) cell2mat(Y)], '-r');
+
+xm = cell2mat(x);
+ym = cell2mat(Y);
+
+figure;
+hold on;
+grid on;
+plot(xm(ntrain + nval + 1 : ntrain + nval + ntest), '-b');
+plot(ym(ntrain + nval - 9 : ntrain + nval + ntest - 10), '-r');
+
+
+
+%% PART 2
+k1 = 0 : 0.025 : 1;
+p1 = sin(4 * pi * k1);
+t1 = -ones(size(p1));
+
+k2 = 2.9 : 0.025 : 4.55;
+g = @(k) cos(-cos(k) .* k .^ 2 + k);
+p2 = g(k2);
+t2 = ones(size(p2));
+
+R = {6; 7; 1};
+P = [repmat(p1, 1, R{1}), p2, repmat(p1, 1, R{2}), p2, repmat(p1, 1, R{3}), p2];
+T = [repmat(t1, 1, R{1}), t2, repmat(t1, 1, R{2}), t2, repmat(t1, 1, R{3}), t2];
+
+Pseq = con2seq(P);
+Tseq = con2seq(T);
+
+net = distdelaynet({0 : 4, 0 : 4}, 8, 'trainoss');
+net.layers{2}.transferFcn = 'tansig';
+net.divideFcn = '';
+net = configure(net, Pseq, Tseq);
+view(net);
+
+net.trainParam.epochs = 100;
+%net.trainParam.max_fail = 2000;
+net.trainParam.goal = 10e-5;
+
+[Xs, Xi, Ai, Ts] = preparets(net, Pseq, Tseq); 
+net = train(net, Xs, Ts, Xi, Ai);
+Y = sim(net, Xs, Xi);
+
+figure;
+hold on;
+grid on;
+plot(cell2mat(Tseq), '-b');
+plot([cell2mat(Xi) cell2mat(Y)], '-r');
+
+
+
+%%
+t0 = 0;
+tn = 10;
+dt = 0.01;
+n = (tn - t0) / dt + 1;
+
+fun = @(k) cos(k .^ 2);
+fun2 = @(y, u) y ./ (1 + y.^2) + u.^3;
+
+u = zeros(1, n);
+u(1) = fun(0);
+
+x = zeros(1, n);
+
+for i = 2 : n
+    t = t0 + (i - 1) * dt;
+    x(i) = fun2(x(i - 1), u(i - 1));
+    u(i) = fun(t);
+end
+
+figure
+subplot(2,1,1)
+plot(t0:dt:tn, u, '-b'),grid
+ylabel('control')
+subplot(2,1,2)
+plot(t0:dt:tn, x, '-r'), grid
+ylabel('state')
+xlabel('t')
+
+D = 3;
+ntrain = 700;
+nval = 200;
+ntest = 97;
+
+trainInd = 1 : ntrain;
+valInd = ntrain + 1 : ntrain + nval;
+testInd = ntrain + nval + 1 : ntrain + nval + ntest;
+
+net = narxnet(1 : 3, 1, 10);
+net.trainFcn = 'trainlm';
+
+net.divideFcn = 'divideind';
+net.divideParam.trainInd = trainInd;
+net.divideParam.valInd = valInd;
+net.divideParam.testInd = testInd;
+
+net.trainParam.epochs = 600;
+net.trainParam.max_fail = 600;
+net.trainParam.goal = 10e-8;
+view(net);
+
+[Xs, Xi, Ai, Ts] = preparets(net, con2seq(u), {}, con2seq(x)); 
+net = train(net, Xs, Ts, Xi, Ai);
+Y = sim(net, Xs, Xi);
+
+figure
+subplot(3,1,1)
+plot(t0:dt:tn, u, '-b'),grid
+ylabel('control')
+subplot(3,1,2)
+plot(t0:dt:tn, x, '-b', t0:dt:tn, [x(1:D) cell2mat(Y)], '-r'), grid
+ylabel('state')
+subplot(3,1,3)
+plot(t0+D*dt:dt:tn, x(D+1:end) - cell2mat(Y)), grid
+ylabel('error')
+xlabel('t')
+##### SOURCE END #####
+--></body></html>

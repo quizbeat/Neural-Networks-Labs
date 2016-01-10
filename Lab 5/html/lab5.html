@@ -1,0 +1,770 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>lab5</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-01-09"><meta name="DC.source" content="lab5.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">PART 1</a></li><li><a href="#2">test</a></li><li><a href="#5">test 1</a></li><li><a href="#6">test 2</a></li><li><a href="#8">test 1</a></li><li><a href="#9">test 2</a></li></ul></div><h2>PART 1<a name="1"></a></h2><pre class="codeinput">clear;
+clc;
+
+k1 = 0 : 0.025 : 1;
+p1 = sin(4 * pi * k1);
+t1 = -ones(size(p1));
+
+k2 = 2.9 : 0.025 : 4.55;
+g = @(k) cos(-cos(k) .* k .^ 2 + k);
+p2 = g(k2);
+t2 = ones(size(p2));
+
+R = {6; 7; 1};
+P = [repmat(p1, 1, R{1}), p2, repmat(p1, 1, R{2}), p2, repmat(p1, 1, R{3}), p2];
+T = [repmat(t1, 1, R{1}), t2, repmat(t1, 1, R{2}), t2, repmat(t1, 1, R{3}), t2];
+
+Pseq = con2seq(P);
+Tseq = con2seq(T);
+
+net = layrecnet(1 : 2, 8, <span class="string">'trainoss'</span>);
+net.layers{1}.transferFcn = <span class="string">'tansig'</span>;
+net.layers{2}.transferFcn = <span class="string">'tansig'</span>;
+net = configure(net, Pseq, Tseq);
+view(net);
+
+[p, Pi, Ai, t] = preparets(net, Pseq, Tseq);
+net.trainParam.epochs = 10000;
+net.trainParam.goal = 1.0e-5;
+net = train(net, p, t, Pi, Ai);
+Y = sim(net, p, Pi, Ai);
+
+figure;
+hold <span class="string">on</span>;
+plot(cell2mat(t), <span class="string">'-b'</span>);
+plot(cell2mat(Y), <span class="string">'-r'</span>);
+legend(<span class="string">'Target'</span>, <span class="string">'Output'</span>);
+
+Yc = zeros(1, numel(Y));
+<span class="keyword">for</span> i = 1 : numel(Y)
+    <span class="keyword">if</span> Y{i} &gt;= 0
+        Yc(i) = 1;
+    <span class="keyword">else</span>
+        Yc(i) = -1;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+display(nnz(Yc == T(3 : end)))
+</pre><pre class="codeoutput">
+ans =
+
+   737
+
+</pre><img vspace="5" hspace="5" src="lab5_01.png" alt=""> <img vspace="5" hspace="5" src="lab5_02.png" alt=""> <img vspace="5" hspace="5" src="lab5_03.png" alt=""> <h2>test<a name="2"></a></h2><pre class="codeinput">R = {1; 7; 1};
+P = [repmat(p1, 1, R{1}), p2, repmat(p1, 1, R{2}), p2, repmat(p1, 1, R{3}), p2];
+T = [repmat(t1, 1, R{1}), t2, repmat(t1, 1, R{2}), t2, repmat(t1, 1, R{3}), t2];
+Pseq = con2seq(P);
+Tseq = con2seq(T);
+[p, Pi, Ai, t] = preparets(net, Pseq, Tseq);
+Y = sim(net, p, Pi, Ai);
+figure;
+hold <span class="string">on</span>;
+plot(cell2mat(t), <span class="string">'-b'</span>);
+plot(cell2mat(Y), <span class="string">'-r'</span>);
+legend(<span class="string">'Target'</span>, <span class="string">'Output'</span>);
+</pre><img vspace="5" hspace="5" src="lab5_04.png" alt=""> <pre class="codeinput">target0 = [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 +1 +1 +1 +1 +1 +1 -1 -1;
+           -1 +1 +1 +1 -1 -1 +1 +1 +1 -1;
+           -1 +1 +1 +1 -1 -1 +1 +1 +1 -1;
+           -1 +1 +1 +1 -1 -1 +1 +1 +1 -1;
+           -1 +1 +1 +1 -1 -1 +1 +1 +1 -1;
+           -1 +1 +1 +1 -1 -1 +1 +1 +1 -1;
+           -1 +1 +1 +1 -1 -1 +1 +1 +1 -1;
+           -1 -1 +1 +1 +1 +1 +1 +1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 -1 -1 -1 -1 -1 -1 -1];
+target1 = [-1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1];
+target2 = [+1 +1 +1 +1 +1 +1 +1 +1 -1 -1;
+           +1 +1 +1 +1 +1 +1 +1 +1 -1 -1;
+           -1 -1 -1 -1 -1 -1 +1 +1 -1 -1;
+           -1 -1 -1 -1 -1 -1 +1 +1 -1 -1;
+           -1 -1 -1 -1 -1 -1 +1 +1 -1 -1;
+           +1 +1 +1 +1 +1 +1 +1 +1 -1 -1;
+           +1 +1 +1 +1 +1 +1 +1 +1 -1 -1;
+           +1 +1 -1 -1 -1 -1 -1 -1 -1 -1;
+           +1 +1 -1 -1 -1 -1 -1 -1 -1 -1;
+           +1 +1 -1 -1 -1 -1 -1 -1 -1 -1;
+           +1 +1 +1 +1 +1 +1 +1 +1 -1 -1;
+           +1 +1 +1 +1 +1 +1 +1 +1 -1 -1;];
+target3 = [-1 -1 +1 +1 +1 +1 +1 +1 -1 -1;
+           -1 -1 +1 +1 +1 +1 +1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 +1 +1 +1 +1 -1 -1;
+           -1 -1 -1 -1 +1 +1 +1 +1 -1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 +1 +1 +1 +1 +1 +1 +1 -1;
+           -1 -1 +1 +1 +1 +1 +1 +1 -1 -1];
+target4 = [-1 +1 +1 -1 -1 -1 -1 +1 +1 -1;
+           -1 +1 +1 -1 -1 -1 -1 +1 +1 -1;
+           -1 +1 +1 -1 -1 -1 -1 +1 +1 -1;
+           -1 +1 +1 -1 -1 -1 -1 +1 +1 -1;
+           -1 +1 +1 -1 -1 -1 -1 +1 +1 -1;
+           -1 +1 +1 +1 +1 +1 +1 +1 +1 -1;
+           -1 +1 +1 +1 +1 +1 +1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1];
+target6 = [+1 +1 +1 +1 +1 +1 -1 -1 -1 -1;
+           +1 +1 +1 +1 +1 +1 -1 -1 -1 -1;
+           +1 +1 -1 -1 -1 -1 -1 -1 -1 -1;
+           +1 +1 -1 -1 -1 -1 -1 -1 -1 -1;
+           +1 +1 +1 +1 +1 +1 -1 -1 -1 -1;
+           +1 +1 +1 +1 +1 +1 -1 -1 -1 -1;
+           +1 +1 -1 -1 +1 +1 -1 -1 -1 -1;
+           +1 +1 -1 -1 +1 +1 -1 -1 -1 -1;
+           +1 +1 -1 -1 +1 +1 -1 -1 -1 -1;
+           +1 +1 -1 -1 +1 +1 -1 -1 -1 -1;
+           +1 +1 +1 +1 +1 +1 -1 -1 -1 -1;
+           +1 +1 +1 +1 +1 +1 -1 -1 -1 -1];
+target9 = [-1 -1 -1 -1 +1 +1 +1 +1 +1 +1;
+           -1 -1 -1 -1 +1 +1 +1 +1 +1 +1;
+           -1 -1 -1 -1 +1 +1 -1 -1 +1 +1;
+           -1 -1 -1 -1 +1 +1 -1 -1 +1 +1;
+           -1 -1 -1 -1 +1 +1 -1 -1 +1 +1;
+           -1 -1 -1 -1 +1 +1 -1 -1 +1 +1;
+           -1 -1 -1 -1 +1 +1 +1 +1 +1 +1;
+           -1 -1 -1 -1 +1 +1 +1 +1 +1 +1;
+           -1 -1 -1 -1 -1 -1 -1 -1 +1 +1;
+           -1 -1 -1 -1 -1 -1 -1 -1 +1 +1;
+           -1 -1 -1 -1 +1 +1 +1 +1 +1 +1;
+           -1 -1 -1 -1 +1 +1 +1 +1 +1 +1];
+</pre><pre class="codeinput">net = newhop([target9(:), target6(:), target1(:)]);
+view(net);
+
+iterations = 600;
+res = sim(net, {1 iterations}, {}, target9(:));
+res = reshape(res{iterations}, 12, 10);
+res(res &gt;=0 ) = 2;
+res(res &lt; 0 ) = 1;
+
+map = [1, 1, 1; 0, 0, 0];
+image(res);
+colormap(map)
+axis <span class="string">off</span>
+axis <span class="string">image</span>
+</pre><img vspace="5" hspace="5" src="lab5_05.png" alt=""> <img vspace="5" hspace="5" src="lab5_06.png" alt=""> <h2>test 1<a name="5"></a></h2><pre class="codeinput">rando = rand([12, 10]);
+noise_degree = 0.2;
+input = target6;
+<span class="keyword">for</span> i = 1:12
+    <span class="keyword">for</span> j = 1:10
+        <span class="keyword">if</span> rando(i, j) &lt; noise_degree
+            input(i, j) = -input(i, j);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+res = reshape(input, 12, 10);
+res(res &gt;=0 ) = 2;
+res(res &lt; 0 ) = 1;
+map = [1, 1, 1; 0, 0, 0];
+figure(<span class="string">'Name'</span>, <span class="string">'Noised'</span>);
+image(res);
+colormap(map)
+axis <span class="string">off</span>
+axis <span class="string">image</span>
+
+iterations = 100;
+res = sim(net, {1 iterations}, {}, input(:));
+res = reshape(res{iterations}, 12, 10);
+res(res &gt;=0 ) = 2;
+res(res &lt; 0 ) = 1;
+map = [1, 1, 1; 0, 0, 0];
+figure(<span class="string">'Name'</span>, <span class="string">'Recognised'</span>);
+image(res);
+colormap(map)
+axis <span class="string">off</span>
+axis <span class="string">image</span>
+</pre><img vspace="5" hspace="5" src="lab5_07.png" alt=""> <img vspace="5" hspace="5" src="lab5_08.png" alt=""> <h2>test 2<a name="6"></a></h2><pre class="codeinput">rando = rand([12, 10]);
+noise_degree = 0.3;
+input = target1;
+<span class="keyword">for</span> i = 1:12
+    <span class="keyword">for</span> j = 1:10
+        <span class="keyword">if</span> rando(i, j) &lt; noise_degree
+            input(i, j) = -input(i, j);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+res = reshape(input, 12, 10);
+res(res &gt;=0 ) = 2;
+res(res &lt; 0 ) = 1;
+map = [1, 1, 1; 0, 0, 0];
+figure(<span class="string">'Name'</span>, <span class="string">'Noised'</span>);
+image(res);
+colormap(map)
+axis <span class="string">off</span>
+axis <span class="string">image</span>
+
+iterations = 600;
+res = sim(net, {1 iterations}, {}, input(:));
+res = reshape(res{iterations}, 12, 10);
+res(res &gt;=0 ) = 2;
+res(res &lt; 0 ) = 1;
+map = [1, 1, 1; 0, 0, 0];
+figure(<span class="string">'Name'</span>, <span class="string">'Recognised'</span>);
+image(res);
+colormap(map)
+axis <span class="string">off</span>
+axis <span class="string">image</span>
+</pre><img vspace="5" hspace="5" src="lab5_09.png" alt=""> <img vspace="5" hspace="5" src="lab5_10.png" alt=""> <pre class="codeinput">p = [target0(:), target1(:), target2(:), target3(:), target4(:), target6(:), target9(:)];
+Q = 7;
+R = 120;
+IW = [target0(:)';
+      target1(:)';
+      target2(:)';
+      target3(:)';
+      target4(:)';
+      target6(:)';
+      target9(:)'];
+b = ones(Q, 1) * R;
+
+a = zeros(Q, Q);
+<span class="keyword">for</span> i = 1 : Q
+    a(:, i) = IW * p(:, i) + b;
+<span class="keyword">end</span>
+
+net = newhop(a);
+net.biasConnect(1) = 0;
+net.layers{1}.transferFcn = <span class="string">'poslin'</span>;
+
+eps = 1 / (Q - 1);
+net.LW{1, 1} = eye(Q, Q) * (1 + eps) - ones(Q, Q) * eps;
+view(net);
+
+iterations = 600;
+input = target9(:);
+a1 = IW * input + b;
+res = sim(net, {1 iterations}, {}, a1);
+a2 = res{iterations};
+ind = find(a2 == max(a2));
+answer = IW(ind, :)';
+
+res = reshape(answer, 12, 10);
+res(res &gt;=0 ) = 2;
+res(res &lt; 0 ) = 1;
+
+map = [1, 1, 1; 0, 0, 0];
+image(res);
+colormap(map)
+axis <span class="string">off</span>
+axis <span class="string">image</span>
+</pre><img vspace="5" hspace="5" src="lab5_11.png" alt=""> <img vspace="5" hspace="5" src="lab5_12.png" alt=""> <h2>test 1<a name="8"></a></h2><pre class="codeinput">iterations = 600;
+input = target6;
+rando = rand([12, 10]);
+noise_degree = 0.3;
+<span class="keyword">for</span> i = 1:12
+    <span class="keyword">for</span> j = 1:10
+        <span class="keyword">if</span> rando(i, j) &lt; noise_degree
+            input(i, j) = -input(i, j);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+res = reshape(input, 12, 10);
+res(res &gt;=0 ) = 2;
+res(res &lt; 0 ) = 1;
+map = [1, 1, 1; 0, 0, 0];
+figure(<span class="string">'Name'</span>, <span class="string">'Noised'</span>);
+image(res);
+colormap(map)
+axis <span class="string">off</span>
+axis <span class="string">image</span>
+
+input = input(:);
+a1 = IW * input + b;
+res = sim(net, {1 iterations}, {}, a1);
+a2 = res{iterations};
+ind = find(a2 == max(a2));
+answer = IW(ind, :)';
+
+figure
+res = reshape(answer, 12, 10);
+res(res &gt;=0 ) = 2;
+res(res &lt; 0 ) = 1;
+map = [1, 1, 1; 0, 0, 0];
+image(res);
+colormap(map)
+axis <span class="string">off</span>
+axis <span class="string">image</span>
+</pre><img vspace="5" hspace="5" src="lab5_13.png" alt=""> <img vspace="5" hspace="5" src="lab5_14.png" alt=""> <h2>test 2<a name="9"></a></h2><pre class="codeinput">iterations = 600;
+input = target1;
+rando = rand([12, 10]);
+noise_degree = 0.3;
+<span class="keyword">for</span> i = 1:12
+    <span class="keyword">for</span> j = 1:10
+        <span class="keyword">if</span> rando(i, j) &lt; noise_degree
+            input(i, j) = -input(i, j);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+res = reshape(input, 12, 10);
+res(res &gt;=0 ) = 2;
+res(res &lt; 0 ) = 1;
+map = [1, 1, 1; 0, 0, 0];
+figure(<span class="string">'Name'</span>, <span class="string">'Noised'</span>);
+image(res);
+colormap(map)
+axis <span class="string">off</span>
+axis <span class="string">image</span>
+
+input = input(:);
+a1 = IW * input + b;
+res = sim(net, {1 iterations}, {}, a1);
+a2 = res{iterations};
+ind = find(a2 == max(a2));
+answer = IW(ind, :)';
+
+figure
+res = reshape(answer, 12, 10);
+res(res &gt;=0 ) = 2;
+res(res &lt; 0 ) = 1;
+map = [1, 1, 1; 0, 0, 0];
+image(res);
+colormap(map)
+axis <span class="string">off</span>
+axis <span class="string">image</span>
+</pre><img vspace="5" hspace="5" src="lab5_15.png" alt=""> <img vspace="5" hspace="5" src="lab5_16.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% PART 1
+clear;
+clc;
+
+k1 = 0 : 0.025 : 1;
+p1 = sin(4 * pi * k1);
+t1 = -ones(size(p1));
+
+k2 = 2.9 : 0.025 : 4.55;
+g = @(k) cos(-cos(k) .* k .^ 2 + k);
+p2 = g(k2);
+t2 = ones(size(p2));
+
+R = {6; 7; 1};
+P = [repmat(p1, 1, R{1}), p2, repmat(p1, 1, R{2}), p2, repmat(p1, 1, R{3}), p2];
+T = [repmat(t1, 1, R{1}), t2, repmat(t1, 1, R{2}), t2, repmat(t1, 1, R{3}), t2];
+
+Pseq = con2seq(P);
+Tseq = con2seq(T);
+
+net = layrecnet(1 : 2, 8, 'trainoss');
+net.layers{1}.transferFcn = 'tansig';
+net.layers{2}.transferFcn = 'tansig';
+net = configure(net, Pseq, Tseq);
+view(net);
+
+[p, Pi, Ai, t] = preparets(net, Pseq, Tseq);
+net.trainParam.epochs = 10000;
+net.trainParam.goal = 1.0e-5;
+net = train(net, p, t, Pi, Ai);
+Y = sim(net, p, Pi, Ai);
+
+figure;
+hold on;
+plot(cell2mat(t), '-b');
+plot(cell2mat(Y), '-r');
+legend('Target', 'Output');
+
+Yc = zeros(1, numel(Y));
+for i = 1 : numel(Y)
+    if Y{i} >= 0
+        Yc(i) = 1;
+    else
+        Yc(i) = -1;
+    end
+end
+display(nnz(Yc == T(3 : end)))
+
+
+%% test
+R = {1; 7; 1};
+P = [repmat(p1, 1, R{1}), p2, repmat(p1, 1, R{2}), p2, repmat(p1, 1, R{3}), p2];
+T = [repmat(t1, 1, R{1}), t2, repmat(t1, 1, R{2}), t2, repmat(t1, 1, R{3}), t2];
+Pseq = con2seq(P);
+Tseq = con2seq(T);
+[p, Pi, Ai, t] = preparets(net, Pseq, Tseq);
+Y = sim(net, p, Pi, Ai);
+figure;
+hold on;
+plot(cell2mat(t), '-b');
+plot(cell2mat(Y), '-r');
+legend('Target', 'Output');
+
+
+
+%%
+target0 = [-1 -1 -1 -1 -1 -1 -1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 +1 +1 +1 +1 +1 +1 -1 -1;
+           -1 +1 +1 +1 -1 -1 +1 +1 +1 -1;
+           -1 +1 +1 +1 -1 -1 +1 +1 +1 -1;
+           -1 +1 +1 +1 -1 -1 +1 +1 +1 -1;
+           -1 +1 +1 +1 -1 -1 +1 +1 +1 -1;
+           -1 +1 +1 +1 -1 -1 +1 +1 +1 -1;
+           -1 +1 +1 +1 -1 -1 +1 +1 +1 -1;
+           -1 -1 +1 +1 +1 +1 +1 +1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 -1 -1 -1 -1 -1 -1 -1];
+target1 = [-1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1;
+           -1 -1 -1 +1 +1 +1 +1 -1 -1 -1];
+target2 = [+1 +1 +1 +1 +1 +1 +1 +1 -1 -1;
+           +1 +1 +1 +1 +1 +1 +1 +1 -1 -1;
+           -1 -1 -1 -1 -1 -1 +1 +1 -1 -1;
+           -1 -1 -1 -1 -1 -1 +1 +1 -1 -1;
+           -1 -1 -1 -1 -1 -1 +1 +1 -1 -1;
+           +1 +1 +1 +1 +1 +1 +1 +1 -1 -1;
+           +1 +1 +1 +1 +1 +1 +1 +1 -1 -1;
+           +1 +1 -1 -1 -1 -1 -1 -1 -1 -1;
+           +1 +1 -1 -1 -1 -1 -1 -1 -1 -1;
+           +1 +1 -1 -1 -1 -1 -1 -1 -1 -1;
+           +1 +1 +1 +1 +1 +1 +1 +1 -1 -1;
+           +1 +1 +1 +1 +1 +1 +1 +1 -1 -1;];
+target3 = [-1 -1 +1 +1 +1 +1 +1 +1 -1 -1;
+           -1 -1 +1 +1 +1 +1 +1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 +1 +1 +1 +1 -1 -1;
+           -1 -1 -1 -1 +1 +1 +1 +1 -1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 +1 +1 +1 +1 +1 +1 +1 -1;
+           -1 -1 +1 +1 +1 +1 +1 +1 -1 -1];
+target4 = [-1 +1 +1 -1 -1 -1 -1 +1 +1 -1;
+           -1 +1 +1 -1 -1 -1 -1 +1 +1 -1;
+           -1 +1 +1 -1 -1 -1 -1 +1 +1 -1;
+           -1 +1 +1 -1 -1 -1 -1 +1 +1 -1;
+           -1 +1 +1 -1 -1 -1 -1 +1 +1 -1;
+           -1 +1 +1 +1 +1 +1 +1 +1 +1 -1;
+           -1 +1 +1 +1 +1 +1 +1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1;
+           -1 -1 -1 -1 -1 -1 -1 +1 +1 -1];
+target6 = [+1 +1 +1 +1 +1 +1 -1 -1 -1 -1;
+           +1 +1 +1 +1 +1 +1 -1 -1 -1 -1;
+           +1 +1 -1 -1 -1 -1 -1 -1 -1 -1;
+           +1 +1 -1 -1 -1 -1 -1 -1 -1 -1;
+           +1 +1 +1 +1 +1 +1 -1 -1 -1 -1;
+           +1 +1 +1 +1 +1 +1 -1 -1 -1 -1;
+           +1 +1 -1 -1 +1 +1 -1 -1 -1 -1;
+           +1 +1 -1 -1 +1 +1 -1 -1 -1 -1;
+           +1 +1 -1 -1 +1 +1 -1 -1 -1 -1;
+           +1 +1 -1 -1 +1 +1 -1 -1 -1 -1;
+           +1 +1 +1 +1 +1 +1 -1 -1 -1 -1;
+           +1 +1 +1 +1 +1 +1 -1 -1 -1 -1];
+target9 = [-1 -1 -1 -1 +1 +1 +1 +1 +1 +1;
+           -1 -1 -1 -1 +1 +1 +1 +1 +1 +1;
+           -1 -1 -1 -1 +1 +1 -1 -1 +1 +1;
+           -1 -1 -1 -1 +1 +1 -1 -1 +1 +1;
+           -1 -1 -1 -1 +1 +1 -1 -1 +1 +1;
+           -1 -1 -1 -1 +1 +1 -1 -1 +1 +1;
+           -1 -1 -1 -1 +1 +1 +1 +1 +1 +1;
+           -1 -1 -1 -1 +1 +1 +1 +1 +1 +1;
+           -1 -1 -1 -1 -1 -1 -1 -1 +1 +1;
+           -1 -1 -1 -1 -1 -1 -1 -1 +1 +1;
+           -1 -1 -1 -1 +1 +1 +1 +1 +1 +1;
+           -1 -1 -1 -1 +1 +1 +1 +1 +1 +1];
+       
+%%           
+net = newhop([target9(:), target6(:), target1(:)]);
+view(net);
+
+iterations = 600;
+res = sim(net, {1 iterations}, {}, target9(:));
+res = reshape(res{iterations}, 12, 10);
+res(res >=0 ) = 2;
+res(res < 0 ) = 1;
+
+map = [1, 1, 1; 0, 0, 0];
+image(res);
+colormap(map)
+axis off
+axis image
+
+%% test 1
+rando = rand([12, 10]);
+noise_degree = 0.2;
+input = target6;
+for i = 1:12
+    for j = 1:10
+        if rando(i, j) < noise_degree
+            input(i, j) = -input(i, j);
+        end
+    end
+end
+
+res = reshape(input, 12, 10);
+res(res >=0 ) = 2;
+res(res < 0 ) = 1;
+map = [1, 1, 1; 0, 0, 0];
+figure('Name', 'Noised');
+image(res);
+colormap(map)
+axis off
+axis image
+
+iterations = 100;
+res = sim(net, {1 iterations}, {}, input(:));
+res = reshape(res{iterations}, 12, 10);
+res(res >=0 ) = 2;
+res(res < 0 ) = 1;
+map = [1, 1, 1; 0, 0, 0];
+figure('Name', 'Recognised');
+image(res);
+colormap(map)
+axis off
+axis image
+
+%% test 2
+rando = rand([12, 10]);
+noise_degree = 0.3;
+input = target1;
+for i = 1:12
+    for j = 1:10
+        if rando(i, j) < noise_degree
+            input(i, j) = -input(i, j);
+        end
+    end
+end
+
+res = reshape(input, 12, 10);
+res(res >=0 ) = 2;
+res(res < 0 ) = 1;
+map = [1, 1, 1; 0, 0, 0];
+figure('Name', 'Noised');
+image(res);
+colormap(map)
+axis off
+axis image
+
+iterations = 600;
+res = sim(net, {1 iterations}, {}, input(:));
+res = reshape(res{iterations}, 12, 10);
+res(res >=0 ) = 2;
+res(res < 0 ) = 1;
+map = [1, 1, 1; 0, 0, 0];
+figure('Name', 'Recognised');
+image(res);
+colormap(map)
+axis off
+axis image
+
+%%
+p = [target0(:), target1(:), target2(:), target3(:), target4(:), target6(:), target9(:)];
+Q = 7;
+R = 120;
+IW = [target0(:)';
+      target1(:)';
+      target2(:)';
+      target3(:)';
+      target4(:)';
+      target6(:)';
+      target9(:)'];
+b = ones(Q, 1) * R;
+
+a = zeros(Q, Q);
+for i = 1 : Q
+    a(:, i) = IW * p(:, i) + b;
+end
+
+net = newhop(a);
+net.biasConnect(1) = 0;
+net.layers{1}.transferFcn = 'poslin';
+
+eps = 1 / (Q - 1);
+net.LW{1, 1} = eye(Q, Q) * (1 + eps) - ones(Q, Q) * eps;
+view(net);
+
+iterations = 600;
+input = target9(:);
+a1 = IW * input + b;
+res = sim(net, {1 iterations}, {}, a1);
+a2 = res{iterations};
+ind = find(a2 == max(a2));
+answer = IW(ind, :)';
+
+res = reshape(answer, 12, 10);
+res(res >=0 ) = 2;
+res(res < 0 ) = 1;
+
+map = [1, 1, 1; 0, 0, 0];
+image(res);
+colormap(map)
+axis off
+axis image
+
+%% test 1
+iterations = 600;
+input = target6;
+rando = rand([12, 10]);
+noise_degree = 0.3;
+for i = 1:12
+    for j = 1:10
+        if rando(i, j) < noise_degree
+            input(i, j) = -input(i, j);
+        end
+    end
+end
+res = reshape(input, 12, 10);
+res(res >=0 ) = 2;
+res(res < 0 ) = 1;
+map = [1, 1, 1; 0, 0, 0];
+figure('Name', 'Noised');
+image(res);
+colormap(map)
+axis off
+axis image
+
+input = input(:);
+a1 = IW * input + b;
+res = sim(net, {1 iterations}, {}, a1);
+a2 = res{iterations};
+ind = find(a2 == max(a2));
+answer = IW(ind, :)';
+
+figure
+res = reshape(answer, 12, 10);
+res(res >=0 ) = 2;
+res(res < 0 ) = 1;
+map = [1, 1, 1; 0, 0, 0];
+image(res);
+colormap(map)
+axis off
+axis image
+
+%% test 2
+iterations = 600;
+input = target1;
+rando = rand([12, 10]);
+noise_degree = 0.3;
+for i = 1:12
+    for j = 1:10
+        if rando(i, j) < noise_degree
+            input(i, j) = -input(i, j);
+        end
+    end
+end
+res = reshape(input, 12, 10);
+res(res >=0 ) = 2;
+res(res < 0 ) = 1;
+map = [1, 1, 1; 0, 0, 0];
+figure('Name', 'Noised');
+image(res);
+colormap(map)
+axis off
+axis image
+
+input = input(:);
+a1 = IW * input + b;
+res = sim(net, {1 iterations}, {}, a1);
+a2 = res{iterations};
+ind = find(a2 == max(a2));
+answer = IW(ind, :)';
+
+figure
+res = reshape(answer, 12, 10);
+res(res >=0 ) = 2;
+res(res < 0 ) = 1;
+map = [1, 1, 1; 0, 0, 0];
+image(res);
+colormap(map)
+axis off
+axis image
+
+##### SOURCE END #####
+--></body></html>

@@ -7,7 +7,14 @@ t = [0 1 0 0 0 1]; % target
 x = [-39  45   8  25  0  39; % inputs
       -1 -16 -28 -25 19  45] ./ 10;
 
-net = newp([-5 5; -5 5], 1, 'hardlim', 'learnp'); % creates perceptron
+net = perceptron('hardlim', 'learnp'); % creates perceptron
+net.inputs{1}
+net.layers{1}
+net.outputs{1}
+
+net.inputWeights{1, 1}
+net.biases{1}
+
 net = configure(net, x, t); % configures network with inputs and target
 
 net.name = 'My Network';
@@ -17,8 +24,8 @@ net.biases{1}.initFcn = 'rands'; % shift
 
 net = init(net);
 
-net.IW{1, 1}
-net.b{1}
+input_weights = net.IW{1, 1}
+biases = net.b{1}
 
 display(net); % network structure
 
@@ -34,7 +41,7 @@ display(net); % network structure
 % ------------
 
 
-passes = 2;
+passes = 5;
 [~, columns] = size(x);
 
 % perceptron training
@@ -48,8 +55,8 @@ for i = 1 : passes
 
         Y = hardlim(IW * P + b);
         E = T - Y;
+        
         perf = mae(E);
-
         if (~perf)
             continue;
         end
@@ -76,7 +83,7 @@ y = net(x);
 
 err = t - y;
 h = mae(err);
-disp({'h=', h});
+disp({'mae(err) = ', h});
 
 plotpv(x,t), grid
 plotpc(net.IW{1,1}, net.b{1});
@@ -93,7 +100,11 @@ net = init(net);
 
 y = net(x);
 
+iw = net.IW{1, 1}
+b = net.b{1}
+
 disp(mae(t - y));
+e = mae(t - y)
 
 figure;
 
@@ -158,7 +169,15 @@ t1 = [0 1 0 0 1 1 0 1;
       1 0 1 0 0 1 0 0];
  
  
-net = newp([-5 5; -5 5], 1, 'hardlim', 'learnp');
+net = perceptron('hardlim', 'learnp');
+
+net.inputs{1}
+net.layers{1}
+net.outputs{1}
+
+net.inputWeights{1, 1}
+net.biases{1}
+
 net = configure(net, x1, t1);
 
 net.inputWeights{1, 1}.initFcn = 'rands';
@@ -183,6 +202,9 @@ points = 5;
 Tpts = repmat(lower, 1, points) + repmat(upper - lower, 1, points) .* rand(2, points);
 
 TRes = net(Tpts);
+
+iw = net.IW{1, 1}
+b = net.b{1}
 
 %figure;
 plotpv(Tpts, TRes);

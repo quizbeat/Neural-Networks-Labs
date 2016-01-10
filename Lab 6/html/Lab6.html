@@ -1,0 +1,395 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Lab6</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-01-08"><meta name="DC.source" content="Lab6.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">PART 1</a></li><li><a href="#2">PART 2</a></li><li><a href="#4">PART 3</a></li><li><a href="#5">PART 4</a></li></ul></div><h2>PART 1<a name="1"></a></h2><pre class="codeinput">clear;
+clc;
+
+X = [0 1.5;
+     0 1.5];
+
+clusters = 8;
+points = 10;
+deviation = 0.1;
+
+P = nngenc(X, clusters, points, deviation);
+
+figure;
+hold <span class="string">on</span>;
+grid <span class="string">on</span>;
+scatter(P(1, :), P(2, :), 5, [0 1 0], <span class="string">'filled'</span>);
+
+net = competlayer(8);
+net = configure(net, P);
+view(net);
+
+net.divideFcn = <span class="string">''</span>;
+net.trainParam.epochs = 50;
+
+<span class="comment">%net.trainFcn - 'trainru' net.inputWeights{1,1}.learnFcn - 'learnk'</span>
+<span class="comment">%learnk calculates the weight change dW for a given neuron from the</span>
+<span class="comment">%neuron's input P, output A, and learning rate LR according to the</span>
+<span class="comment">%Kohonen learning rule:</span>
+<span class="comment">%a ~= 0 =&gt; dw = lr*(p'-w)</span>
+<span class="comment">% a = 0 =&gt; dw = 0</span>
+
+net = train(net, P);
+
+R = zeros(2, 5) + 1.5 * rand(2, 5);
+res = vec2ind(sim(net, R));
+
+figure;
+hold <span class="string">on</span>;
+grid <span class="string">on</span>;
+scatter(P(1, :), P(2, :), 5, [0 1 0], <span class="string">'filled'</span>);
+<span class="comment">%scatter(net.IW{1}(:, 1), net.IW{1}(:, 2), 5, [0 0 1], 'filled');</span>
+scatter(R(1, :), R(2, :), 5, [1 0 0], <span class="string">'filled'</span>);
+</pre><img vspace="5" hspace="5" src="Lab6_01.png" alt=""> <img vspace="5" hspace="5" src="Lab6_02.png" alt=""> <img vspace="5" hspace="5" src="Lab6_03.png" alt=""> <h2>PART 2<a name="2"></a></h2><pre class="codeinput">X = [0 1.5;
+     0 1.5];
+clusters = 8;
+points = 10;
+deviation = 0.1;
+P = nngenc(X, clusters, points, deviation);
+
+net = newsom(X, [2 4]);
+net = configure(net, X);
+
+plotsomhits(net,P);
+figure
+plotsompos(net,P);
+</pre><img vspace="5" hspace="5" src="Lab6_04.png" alt=""> <img vspace="5" hspace="5" src="Lab6_05.png" alt=""> <pre class="codeinput">net = selforgmap([2 4], <span class="string">'topologyFcn'</span>,<span class="string">'hextop'</span>,<span class="string">'distanceFcn'</span>,<span class="string">'linkdist'</span>);
+net = configure(net, X);
+view(net);
+net.divideFcn = <span class="string">''</span>;
+
+<span class="comment">%1)Ordering Phase</span>
+<span class="comment">%This phase lasts for the given number of steps. The neighborhood distance</span>
+<span class="comment">%starts at a given initial distance, and decreases to the tuning</span>
+<span class="comment">%neighborhood distance (1.0). As the neighborhood distance decreases over</span>
+<span class="comment">%this phase, the neurons of the network typically order themselves in the</span>
+<span class="comment">%input space with the same topology in which they are ordered physically.</span>
+net.inputWeights{1,1}.learnParam.init_neighborhood = 3;
+net.inputWeights{1,1}.learnParam.steps = 100;
+<span class="comment">%2)Tuning Phase</span>
+<span class="comment">%This phase lasts for the rest of training or adaption. The neighborhood</span>
+<span class="comment">%size has decreased below 1 so only the winning neuron learns for each sample.</span>
+net.trainParam.epochs = 150;
+net = train(net, P);
+
+R = zeros(2, 5) + 1.5 * rand(2, 5);
+res = vec2ind(sim(net, R));
+
+figure;
+hold <span class="string">on</span>;
+grid <span class="string">on</span>;
+scatter(P(1, :), P(2, :), 5, [0 1 0], <span class="string">'filled'</span>);
+scatter(net.IW{1}(:, 1), net.IW{1}(:, 2), 5, [0 0 1], <span class="string">'filled'</span>);
+scatter(R(1, :), R(2, :), 5, [1 0 0], <span class="string">'filled'</span>);
+plotsom(net.IW{1, 1}, net.layers{1}.distances);
+</pre><img vspace="5" hspace="5" src="Lab6_06.png" alt=""> <img vspace="5" hspace="5" src="Lab6_07.png" alt=""> <h2>PART 3<a name="4"></a></h2><pre class="codeinput">N = 20;
+T = -1.5 * ones(2, N) + 3 * rand(2, N);
+
+figure;
+hold <span class="string">on</span>;
+grid <span class="string">on</span>;
+plot(T(1,:), T(2,:), <span class="string">'-V'</span>, <span class="string">'MarkerEdgeColor'</span>, <span class="string">'k'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'g'</span>, <span class="string">'MarkerSize'</span>, 7);
+
+net = newsom(T, N);
+<span class="comment">%net = selforgmap(N);</span>
+net = configure(net, T);
+view(net);
+net.divideFcn = <span class="string">''</span>;
+net.trainParam.epochs = 600;
+net = train(net, T);
+
+figure;
+hold <span class="string">on</span>;
+grid <span class="string">on</span>;
+plotsom(net.IW{1,1}, net.layers{1}.distances);
+plot(T(1,:), T(2,:), <span class="string">'V'</span>, <span class="string">'MarkerEdgeColor'</span>, <span class="string">'k'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'g'</span>, <span class="string">'MarkerSize'</span>, 7);
+</pre><img vspace="5" hspace="5" src="Lab6_08.png" alt=""> <img vspace="5" hspace="5" src="Lab6_09.png" alt=""> <img vspace="5" hspace="5" src="Lab6_10.png" alt=""> <h2>PART 4<a name="5"></a></h2><pre class="codeinput">P = [-0.3 -0.3 -1.1 -1.1  1.1  0.5   0  0.2 -0.7 -0.3 0.1 -0.3;
+      1.4  0.3 -0.4  0.7 -0.5 -0.7 0.9 -0.5 -0.2 -0.5 0.7 -0.3];
+
+T = [1 1 1 1 1 1 1 1 -1 -1 1 -1];
+
+plotpv(P, max(0, T));
+</pre><img vspace="5" hspace="5" src="Lab6_11.png" alt=""> <pre class="codeinput">Ti = T;
+Ti(Ti == 1) = 2;
+Ti(Ti == -1) = 1;
+Ti = ind2vec(Ti);
+
+<span class="comment">%percentage = [nnz(T(T == -1)) nnz(T(T == 1))] / numel(T);</span>
+<span class="comment">%net = newlvq(12, percentage, 0.1);</span>
+net = lvqnet(12, 0.1);
+net = configure(net, P, Ti);
+view(net)
+
+<span class="comment">%initfcn = midpoint</span>
+net.IW{1,1}
+<span class="comment">%train ratio, unions of subclasses</span>
+net.LW{2,1}
+
+net.trainParam.epochs = 300;
+net = train(net, P, Ti);
+
+[X,Y] = meshgrid([-1.5 : 0.1 : 1.5], [-1.5 : 0.1 : 1.5]);
+
+res = sim(net, [X(:)'; Y(:)']);
+res = vec2ind(res) - 1;
+
+figure;
+plotpv([X(:)'; Y(:)'], res);
+point = findobj(gca,<span class="string">'type'</span>,<span class="string">'line'</span>);
+set(point,<span class="string">'Color'</span>,<span class="string">'g'</span>);
+hold <span class="string">on</span>;
+plotpv(P, max(0, T));
+</pre><pre class="codeoutput">
+ans =
+
+         0    0.3500
+         0    0.3500
+         0    0.3500
+         0    0.3500
+         0    0.3500
+         0    0.3500
+         0    0.3500
+         0    0.3500
+         0    0.3500
+         0    0.3500
+         0    0.3500
+         0    0.3500
+
+
+ans =
+
+     1     1     1     0     0     0     0     0     0     0     0     0
+     0     0     0     1     1     1     1     1     1     1     1     1
+
+</pre><img vspace="5" hspace="5" src="Lab6_12.png" alt=""> <img vspace="5" hspace="5" src="Lab6_13.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% PART 1
+clear;
+clc;
+
+X = [0 1.5;
+     0 1.5];
+ 
+clusters = 8;
+points = 10;
+deviation = 0.1;
+
+P = nngenc(X, clusters, points, deviation);
+
+figure;
+hold on;
+grid on;
+scatter(P(1, :), P(2, :), 5, [0 1 0], 'filled');
+
+net = competlayer(8);
+net = configure(net, P);
+view(net);
+
+net.divideFcn = '';
+net.trainParam.epochs = 50;
+
+%net.trainFcn - 'trainru' net.inputWeights{1,1}.learnFcn - 'learnk'
+%learnk calculates the weight change dW for a given neuron from the 
+%neuron's input P, output A, and learning rate LR according to the 
+%Kohonen learning rule:
+%a ~= 0 => dw = lr*(p'-w)
+% a = 0 => dw = 0
+
+net = train(net, P);
+
+R = zeros(2, 5) + 1.5 * rand(2, 5);
+res = vec2ind(sim(net, R));
+
+figure;
+hold on;
+grid on;
+scatter(P(1, :), P(2, :), 5, [0 1 0], 'filled');
+%scatter(net.IW{1}(:, 1), net.IW{1}(:, 2), 5, [0 0 1], 'filled');
+scatter(R(1, :), R(2, :), 5, [1 0 0], 'filled');
+
+
+
+
+%% PART 2
+X = [0 1.5;
+     0 1.5];
+clusters = 8;
+points = 10;
+deviation = 0.1;
+P = nngenc(X, clusters, points, deviation);
+
+net = newsom(X, [2 4]);
+net = configure(net, X);
+
+plotsomhits(net,P);
+figure
+plotsompos(net,P);
+
+%%
+net = selforgmap([2 4], 'topologyFcn','hextop','distanceFcn','linkdist');
+net = configure(net, X);
+view(net);
+net.divideFcn = '';
+
+%1)Ordering Phase
+%This phase lasts for the given number of steps. The neighborhood distance
+%starts at a given initial distance, and decreases to the tuning 
+%neighborhood distance (1.0). As the neighborhood distance decreases over
+%this phase, the neurons of the network typically order themselves in the
+%input space with the same topology in which they are ordered physically. 
+net.inputWeights{1,1}.learnParam.init_neighborhood = 3;
+net.inputWeights{1,1}.learnParam.steps = 100;
+%2)Tuning Phase
+%This phase lasts for the rest of training or adaption. The neighborhood
+%size has decreased below 1 so only the winning neuron learns for each sample. 
+net.trainParam.epochs = 150;
+net = train(net, P);
+
+R = zeros(2, 5) + 1.5 * rand(2, 5);
+res = vec2ind(sim(net, R));
+
+figure;
+hold on;
+grid on;
+scatter(P(1, :), P(2, :), 5, [0 1 0], 'filled');
+scatter(net.IW{1}(:, 1), net.IW{1}(:, 2), 5, [0 0 1], 'filled');
+scatter(R(1, :), R(2, :), 5, [1 0 0], 'filled');
+plotsom(net.IW{1, 1}, net.layers{1}.distances);
+
+
+
+
+%% PART 3
+N = 20;
+T = -1.5 * ones(2, N) + 3 * rand(2, N);
+
+figure;
+hold on;
+grid on;
+plot(T(1,:), T(2,:), '-V', 'MarkerEdgeColor', 'k', 'MarkerFaceColor', 'g', 'MarkerSize', 7);
+
+net = newsom(T, N);
+%net = selforgmap(N);
+net = configure(net, T);
+view(net);
+net.divideFcn = '';
+net.trainParam.epochs = 600;
+net = train(net, T);
+
+figure;
+hold on;
+grid on;
+plotsom(net.IW{1,1}, net.layers{1}.distances);
+plot(T(1,:), T(2,:), 'V', 'MarkerEdgeColor', 'k', 'MarkerFaceColor', 'g', 'MarkerSize', 7);
+
+
+
+%% PART 4
+P = [-0.3 -0.3 -1.1 -1.1  1.1  0.5   0  0.2 -0.7 -0.3 0.1 -0.3;
+      1.4  0.3 -0.4  0.7 -0.5 -0.7 0.9 -0.5 -0.2 -0.5 0.7 -0.3];
+ 
+T = [1 1 1 1 1 1 1 1 -1 -1 1 -1];
+
+plotpv(P, max(0, T));
+
+%%
+Ti = T;
+Ti(Ti == 1) = 2;
+Ti(Ti == -1) = 1;
+Ti = ind2vec(Ti);
+
+%percentage = [nnz(T(T == -1)) nnz(T(T == 1))] / numel(T);
+%net = newlvq(12, percentage, 0.1);
+net = lvqnet(12, 0.1);
+net = configure(net, P, Ti);
+view(net)
+
+%initfcn = midpoint
+net.IW{1,1}
+%train ratio, unions of subclasses
+net.LW{2,1}
+
+net.trainParam.epochs = 300;
+net = train(net, P, Ti);
+
+[X,Y] = meshgrid([-1.5 : 0.1 : 1.5], [-1.5 : 0.1 : 1.5]);
+
+res = sim(net, [X(:)'; Y(:)']);
+res = vec2ind(res) - 1;
+
+figure;
+plotpv([X(:)'; Y(:)'], res);
+point = findobj(gca,'type','line');
+set(point,'Color','g');
+hold on;
+plotpv(P, max(0, T));
+##### SOURCE END #####
+--></body></html>

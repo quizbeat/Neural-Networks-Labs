@@ -1,0 +1,860 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>lab1_2</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-12-24"><meta name="DC.source" content="lab1_2.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">1.0</a></li><li><a href="#2">1.4</a></li><li><a href="#3">PART 2</a></li><li><a href="#4">PART 3</a></li></ul></div><h2>1.0<a name="1"></a></h2><pre class="codeinput">clc;
+clear;
+
+
+t = [0 1 0 0 0 1]; <span class="comment">% target</span>
+x = [-39  45   8  25  0  39; <span class="comment">% inputs</span>
+      -1 -16 -28 -25 19  45] ./ 10;
+
+net = perceptron(<span class="string">'hardlim'</span>, <span class="string">'learnp'</span>); <span class="comment">% creates perceptron</span>
+net.inputs{1}
+net.layers{1}
+net.outputs{1}
+
+net.inputWeights{1, 1}
+net.biases{1}
+
+net = configure(net, x, t); <span class="comment">% configures network with inputs and target</span>
+
+net.name = <span class="string">'My Network'</span>;
+
+net.inputWeights{1,1}.initFcn = <span class="string">'rands'</span>; <span class="comment">% {numLayers-by-numInputs array}, init function</span>
+net.biases{1}.initFcn = <span class="string">'rands'</span>; <span class="comment">% shift</span>
+
+net = init(net);
+
+input_weights = net.IW{1, 1}
+biases = net.b{1}
+
+display(net); <span class="comment">% network structure</span>
+
+
+<span class="comment">%plotpv(x,t), grid % plot perceptron input/target vectors</span>
+<span class="comment">%plotpc(net.IW{1,1}, net.b{1}); % plot classification line</span>
+
+
+<span class="comment">% --- INFO ---</span>
+<span class="comment">% mae -- Mean absolute error performance function</span>
+<span class="comment">% mae is a network performance function.</span>
+<span class="comment">% It measures network performance as the mean of absolute errors</span>
+<span class="comment">% ------------</span>
+
+
+passes = 5;
+[~, columns] = size(x);
+
+<span class="comment">% perceptron training</span>
+<span class="keyword">for</span> i = 1 : passes
+    <span class="keyword">for</span> j = 1 : columns
+        P = x(:, j);
+        T = t(:, j);
+
+        IW = net.IW{1, 1}; <span class="comment">% array of input weight values</span>
+        b = net.b{1}; <span class="comment">% array of bias values</span>
+
+        Y = hardlim(IW * P + b);
+        E = T - Y;
+
+        perf = mae(E);
+        <span class="keyword">if</span> (~perf)
+            <span class="keyword">continue</span>;
+        <span class="keyword">end</span>
+
+        dW = E * P'; <span class="comment">% calculate correction</span>
+        db = E; <span class="comment">% calculate correction</span>
+
+        net.IW{1, 1} = IW + dW; <span class="comment">% correction</span>
+        net.b{1} = b + db; <span class="comment">% correction</span>
+    <span class="keyword">end</span>
+
+    i
+    iw = net.IW{1, 1}
+    b = net.b{1}
+
+    <span class="keyword">if</span> (~ mae(t - net(x)))
+        <span class="keyword">break</span>;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+all_err = mae(t - net(x))
+
+y = net(x);
+
+err = t - y;
+h = mae(err);
+disp({<span class="string">'mae(err) = '</span>, h});
+
+plotpv(x,t), grid
+plotpc(net.IW{1,1}, net.b{1});
+</pre><pre class="codeoutput">
+ans = 
+
+    Neural Network Input
+
+              name: 'Input'
+    feedbackOutput: []
+       processFcns: {}
+     processParams: {1x0 cell array of 0 params}
+   processSettings: {0x0 cell array of 0 settings}
+    processedRange: []
+     processedSize: 0
+             range: []
+              size: 0
+          userdata: (your custom info)
+
+
+ans = 
+
+    Neural Network Layer
+ 
+              name: 'Hard Limit'
+        dimensions: 0
+       distanceFcn: (none)
+     distanceParam: (none)
+         distances: []
+           initFcn: 'initwb'
+       netInputFcn: 'netsum'
+     netInputParam: (none)
+         positions: []
+             range: []
+              size: 0
+       topologyFcn: (none)
+       transferFcn: 'hardlim'
+     transferParam: (none)
+          userdata: (your custom info)
+ 
+
+ans = 
+
+    Neural Network Output
+
+              name: 'Output'
+     feedbackInput: []
+     feedbackDelay: 0
+      feedbackMode: 'none'
+       processFcns: {}
+     processParams: {1x0 cell array of 0 params}
+   processSettings: {0x0 cell array of 0 settings}
+    processedRange: []
+     processedSize: 0
+             range: []
+              size: 0
+          userdata: (your custom info)
+
+
+ans = 
+
+    Neural Network Weight
+
+            delays: 0
+           initFcn: '&lt;a href="matlab:doc initzero"&gt;initzero&lt;/a&gt;'
+      initSettings: (none)
+             learn: true
+          learnFcn: '&lt;a href="matlab:doc learnp"&gt;learnp&lt;/a&gt;'
+        learnParam: (none)
+              size: [0 0]
+         weightFcn: '&lt;a href="matlab:doc dotprod"&gt;dotprod&lt;/a&gt;'
+       weightParam: (none)
+          userdata: (your custom info)
+
+
+ans = 
+
+    Neural Network Bias
+
+           initFcn: '&lt;a href="matlab:doc initzero"&gt;initzero&lt;/a&gt;'
+             learn: true
+          learnFcn: '&lt;a href="matlab:doc learnp"&gt;learnp&lt;/a&gt;'
+        learnParam: (none)
+              size: 0
+          userdata: (your custom info)
+
+
+input_weights =
+
+    0.8116   -0.7460
+
+
+biases =
+
+    0.6294
+
+
+net =
+
+    Neural Network
+ 
+              name: 'My Network'
+          userdata: (your custom info)
+ 
+    dimensions:
+ 
+         numInputs: 1
+         numLayers: 1
+        numOutputs: 1
+    numInputDelays: 0
+    numLayerDelays: 0
+ numFeedbackDelays: 0
+ numWeightElements: 3
+        sampleTime: 1
+ 
+    connections:
+ 
+       biasConnect: true
+      inputConnect: true
+      layerConnect: false
+     outputConnect: true
+ 
+    subobjects:
+ 
+             input: Equivalent to inputs{1}
+            output: Equivalent to outputs{1}
+ 
+            inputs: {1x1 cell array of 1 input}
+            layers: {1x1 cell array of 1 layer}
+           outputs: {1x1 cell array of 1 output}
+            biases: {1x1 cell array of 1 bias}
+      inputWeights: {1x1 cell array of 1 weight}
+      layerWeights: {1x1 cell array of 0 weights}
+ 
+    functions:
+ 
+          adaptFcn: 'adaptwb'
+        adaptParam: (none)
+          derivFcn: 'defaultderiv'
+         divideFcn: 'dividetrain'
+       divideParam: (none)
+        divideMode: 'sample'
+           initFcn: 'initlay'
+        performFcn: 'mae'
+      performParam: .regularization, .normalization
+          plotFcns: {'plotperform', plottrainstate,
+                    plotconfusion}
+        plotParams: {1x3 cell array of 3 params}
+          trainFcn: 'trainc'
+        trainParam: .showWindow, .showCommandLine, .show, .epochs,
+                    .time, .goal, .max_fail
+ 
+    weight and bias values:
+ 
+                IW: {1x1 cell} containing 1 input weight matrix
+                LW: {1x1 cell} containing 0 layer weight matrices
+                 b: {1x1 cell} containing 1 bias vector
+ 
+    methods:
+ 
+             adapt: Learn while in continuous use
+         configure: Configure inputs &amp; outputs
+            gensim: Generate Simulink model
+              init: Initialize weights &amp; biases
+           perform: Calculate performance
+               sim: Evaluate network outputs given inputs
+             train: Train network with examples
+              view: View diagram
+       unconfigure: Unconfigure inputs &amp; outputs
+ 
+
+i =
+
+     1
+
+
+iw =
+
+    3.9116    4.6540
+
+
+b =
+
+   -0.3706
+
+
+i =
+
+     2
+
+
+iw =
+
+    3.9116    2.7540
+
+
+b =
+
+   -1.3706
+
+
+i =
+
+     3
+
+
+iw =
+
+    1.4116    3.3540
+
+
+b =
+
+   -3.3706
+
+
+i =
+
+     4
+
+
+iw =
+
+    3.4116    2.3540
+
+
+b =
+
+   -4.3706
+
+
+i =
+
+     5
+
+
+iw =
+
+    3.4116    0.4540
+
+
+b =
+
+   -5.3706
+
+
+all_err =
+
+    0.1667
+
+    'mae(err) = '    [0.1667]
+
+</pre><img vspace="5" hspace="5" src="lab1_2_01.png" alt=""> <h2>1.4<a name="2"></a></h2><pre class="codeinput">net.inputWeights{1,1}.initFcn = <span class="string">'rands'</span>;
+net.biases{1}.initFcn = <span class="string">'rands'</span>;
+net.trainParam.epochs = 50;
+net = init(net);
+
+[net, tr] = train(net, x, t);
+
+y = net(x);
+
+iw = net.IW{1, 1}
+b = net.b{1}
+
+disp(mae(t - y));
+e = mae(t - y)
+
+figure;
+
+<span class="comment">%plotpv(x,t), grid</span>
+<span class="comment">%plotpc(net.IW{1,1}, net.b{1});</span>
+
+
+<span class="comment">% random points for testing</span>
+lower = min(x, [], 2);
+upper = max(x, [], 2);
+
+points = 3;
+
+Tpts = repmat(lower, 1, points) + repmat(upper - lower, 1, points) .* rand(2, points);
+
+disp(Tpts);
+
+TRes = net(Tpts);
+
+<span class="comment">%figure;</span>
+plotpv(Tpts, TRes);
+point = findobj(gca, <span class="string">'type'</span>, <span class="string">'line'</span>);
+set(point, <span class="string">'Color'</span>, <span class="string">'red'</span>);
+hold <span class="string">on</span>;
+plotpv(x ,t);
+plotpc(net.IW{1,1}, net.b{1});
+grid <span class="string">on</span>
+hold <span class="string">off</span>
+</pre><pre class="codeoutput">
+iw =
+
+    2.3647    1.8951
+
+
+b =
+
+   -7.1732
+
+     0
+
+
+e =
+
+     0
+
+   -1.5606    4.1431   -2.5761
+    1.1922    4.2437    4.2853
+
+</pre><img vspace="5" hspace="5" src="lab1_2_02.png" alt=""> <h2>PART 2<a name="3"></a></h2><pre class="codeinput">clc;
+
+x = [-39   0   8  25  0  39;
+      -1 -16 -28 -25 19  45] ./ 10;
+
+net = configure(net, x, t);
+
+net.inputWeights{1, 1}.initFcn = <span class="string">'rands'</span>;
+net.biases{1}.initFcn = <span class="string">'rands'</span>;
+net = init(net);
+
+<span class="comment">%plotpv(x, t), grid;</span>
+
+[net, ty] = train(net, x, t);
+figure;
+plotpv(x, t), grid
+plotpc(net.IW{1, 1}, net.b{1});
+</pre><img vspace="5" hspace="5" src="lab1_2_03.png" alt=""> <h2>PART 3<a name="4"></a></h2><pre class="codeinput">clc;
+
+x1 = [ 39 -46  27 -33 -29  4  -4 -45;
+      -41   5 -19 -17   1 12 -11   0];
+
+t1 = [0 1 0 0 1 1 0 1;
+      1 0 1 0 0 1 0 0];
+
+
+net = perceptron(<span class="string">'hardlim'</span>, <span class="string">'learnp'</span>);
+
+net.inputs{1}
+net.layers{1}
+net.outputs{1}
+
+net.inputWeights{1, 1}
+net.biases{1}
+
+net = configure(net, x1, t1);
+
+net.inputWeights{1, 1}.initFcn = <span class="string">'rands'</span>;
+net.biases{1}.initFcn = <span class="string">'rands'</span>;
+net.trainParam.epochs = 50;
+
+net = init(net);
+
+[net, tr] = train(net, x1, t1);
+
+figure;
+plotpv(x1, t1), grid
+plotpc(net.IW{1, 1}, net.b{1});
+
+
+<span class="comment">% random points for testing</span>
+lower = min(x1, [], 2);
+upper = max(x1, [], 2);
+
+points = 5;
+
+Tpts = repmat(lower, 1, points) + repmat(upper - lower, 1, points) .* rand(2, points);
+
+TRes = net(Tpts);
+
+iw = net.IW{1, 1}
+b = net.b{1}
+
+<span class="comment">%figure;</span>
+plotpv(Tpts, TRes);
+point = findobj(gca, <span class="string">'type'</span>, <span class="string">'line'</span>);
+set(point, <span class="string">'Color'</span>, <span class="string">'red'</span>);
+hold <span class="string">on</span>;
+plotpv(x1 ,t1);
+plotpc(net.IW{1,1}, net.b{1});
+grid <span class="string">on</span>
+hold <span class="string">off</span>
+
+<span class="comment">%view(net);</span>
+</pre><pre class="codeoutput">
+ans = 
+
+    Neural Network Input
+
+              name: 'Input'
+    feedbackOutput: []
+       processFcns: {}
+     processParams: {1x0 cell array of 0 params}
+   processSettings: {0x0 cell array of 0 settings}
+    processedRange: []
+     processedSize: 0
+             range: []
+              size: 0
+          userdata: (your custom info)
+
+
+ans = 
+
+    Neural Network Layer
+ 
+              name: 'Hard Limit'
+        dimensions: 0
+       distanceFcn: (none)
+     distanceParam: (none)
+         distances: []
+           initFcn: 'initwb'
+       netInputFcn: 'netsum'
+     netInputParam: (none)
+         positions: []
+             range: []
+              size: 0
+       topologyFcn: (none)
+       transferFcn: 'hardlim'
+     transferParam: (none)
+          userdata: (your custom info)
+ 
+
+ans = 
+
+    Neural Network Output
+
+              name: 'Output'
+     feedbackInput: []
+     feedbackDelay: 0
+      feedbackMode: 'none'
+       processFcns: {}
+     processParams: {1x0 cell array of 0 params}
+   processSettings: {0x0 cell array of 0 settings}
+    processedRange: []
+     processedSize: 0
+             range: []
+              size: 0
+          userdata: (your custom info)
+
+
+ans = 
+
+    Neural Network Weight
+
+            delays: 0
+           initFcn: '&lt;a href="matlab:doc initzero"&gt;initzero&lt;/a&gt;'
+      initSettings: (none)
+             learn: true
+          learnFcn: '&lt;a href="matlab:doc learnp"&gt;learnp&lt;/a&gt;'
+        learnParam: (none)
+              size: [0 0]
+         weightFcn: '&lt;a href="matlab:doc dotprod"&gt;dotprod&lt;/a&gt;'
+       weightParam: (none)
+          userdata: (your custom info)
+
+
+ans = 
+
+    Neural Network Bias
+
+           initFcn: '&lt;a href="matlab:doc initzero"&gt;initzero&lt;/a&gt;'
+             learn: true
+          learnFcn: '&lt;a href="matlab:doc learnp"&gt;learnp&lt;/a&gt;'
+        learnParam: (none)
+              size: 0
+          userdata: (your custom info)
+
+
+iw =
+
+   -8.6885   40.6983
+   50.0714   -5.1320
+
+
+b =
+
+    0.5844
+    2.9190
+
+</pre><img vspace="5" hspace="5" src="lab1_2_04.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% 1.0
+clc;
+clear;
+
+
+t = [0 1 0 0 0 1]; % target
+x = [-39  45   8  25  0  39; % inputs
+      -1 -16 -28 -25 19  45] ./ 10;
+
+net = perceptron('hardlim', 'learnp'); % creates perceptron
+net.inputs{1}
+net.layers{1}
+net.outputs{1}
+
+net.inputWeights{1, 1}
+net.biases{1}
+
+net = configure(net, x, t); % configures network with inputs and target
+
+net.name = 'My Network';
+
+net.inputWeights{1,1}.initFcn = 'rands'; % {numLayers-by-numInputs array}, init function
+net.biases{1}.initFcn = 'rands'; % shift
+
+net = init(net);
+
+input_weights = net.IW{1, 1}
+biases = net.b{1}
+
+display(net); % network structure
+
+
+%plotpv(x,t), grid % plot perceptron input/target vectors
+%plotpc(net.IW{1,1}, net.b{1}); % plot classification line
+
+
+% REPLACE_WITH_DASH_DASH- INFO REPLACE_WITH_DASH_DASH-
+% mae REPLACE_WITH_DASH_DASH Mean absolute error performance function
+% mae is a network performance function. 
+% It measures network performance as the mean of absolute errors
+% REPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASHREPLACE_WITH_DASH_DASH
+
+
+passes = 5;
+[~, columns] = size(x);
+
+% perceptron training
+for i = 1 : passes 
+    for j = 1 : columns                
+        P = x(:, j);
+        T = t(:, j);
+
+        IW = net.IW{1, 1}; % array of input weight values
+        b = net.b{1}; % array of bias values
+
+        Y = hardlim(IW * P + b);
+        E = T - Y;
+        
+        perf = mae(E);
+        if (~perf)
+            continue;
+        end
+
+        dW = E * P'; % calculate correction
+        db = E; % calculate correction
+
+        net.IW{1, 1} = IW + dW; % correction
+        net.b{1} = b + db; % correction
+    end
+
+    i
+    iw = net.IW{1, 1}
+    b = net.b{1}
+    
+    if (~ mae(t - net(x)))
+        break;
+    end   
+end
+
+all_err = mae(t - net(x))
+
+y = net(x);
+
+err = t - y;
+h = mae(err);
+disp({'mae(err) = ', h});
+
+plotpv(x,t), grid
+plotpc(net.IW{1,1}, net.b{1});
+
+
+%% 1.4
+
+net.inputWeights{1,1}.initFcn = 'rands';
+net.biases{1}.initFcn = 'rands';
+net.trainParam.epochs = 50;
+net = init(net);
+ 
+[net, tr] = train(net, x, t);
+
+y = net(x);
+
+iw = net.IW{1, 1}
+b = net.b{1}
+
+disp(mae(t - y));
+e = mae(t - y)
+
+figure;
+
+%plotpv(x,t), grid
+%plotpc(net.IW{1,1}, net.b{1});
+
+
+% random points for testing
+lower = min(x, [], 2);
+upper = max(x, [], 2);
+
+points = 3;
+
+Tpts = repmat(lower, 1, points) + repmat(upper - lower, 1, points) .* rand(2, points);
+
+disp(Tpts);
+
+TRes = net(Tpts);
+
+%figure;
+plotpv(Tpts, TRes);
+point = findobj(gca, 'type', 'line');
+set(point, 'Color', 'red');
+hold on;
+plotpv(x ,t);
+plotpc(net.IW{1,1}, net.b{1});
+grid on
+hold off
+
+
+
+
+%% PART 2
+clc;
+
+x = [-39   0   8  25  0  39;
+      -1 -16 -28 -25 19  45] ./ 10;
+
+net = configure(net, x, t);
+
+net.inputWeights{1, 1}.initFcn = 'rands';
+net.biases{1}.initFcn = 'rands';
+net = init(net);
+
+%plotpv(x, t), grid;
+
+[net, ty] = train(net, x, t);
+figure;
+plotpv(x, t), grid
+plotpc(net.IW{1, 1}, net.b{1});
+
+
+
+
+%% PART 3
+clc;
+
+x1 = [ 39 -46  27 -33 -29  4  -4 -45;
+      -41   5 -19 -17   1 12 -11   0];
+ 
+t1 = [0 1 0 0 1 1 0 1;
+      1 0 1 0 0 1 0 0];
+ 
+ 
+net = perceptron('hardlim', 'learnp');
+
+net.inputs{1}
+net.layers{1}
+net.outputs{1}
+
+net.inputWeights{1, 1}
+net.biases{1}
+
+net = configure(net, x1, t1);
+
+net.inputWeights{1, 1}.initFcn = 'rands';
+net.biases{1}.initFcn = 'rands';
+net.trainParam.epochs = 50;
+
+net = init(net);
+
+[net, tr] = train(net, x1, t1);
+
+figure;
+plotpv(x1, t1), grid
+plotpc(net.IW{1, 1}, net.b{1});
+
+
+% random points for testing
+lower = min(x1, [], 2);
+upper = max(x1, [], 2);
+
+points = 5;
+
+Tpts = repmat(lower, 1, points) + repmat(upper - lower, 1, points) .* rand(2, points);
+
+TRes = net(Tpts);
+
+iw = net.IW{1, 1}
+b = net.b{1}
+
+%figure;
+plotpv(Tpts, TRes);
+point = findobj(gca, 'type', 'line');
+set(point, 'Color', 'red');
+hold on;
+plotpv(x1 ,t1);
+plotpc(net.IW{1,1}, net.b{1});
+grid on
+hold off
+
+%view(net);
+
+##### SOURCE END #####
+--></body></html>
